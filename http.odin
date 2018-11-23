@@ -183,6 +183,7 @@ parse_request_line :: proc(r: ^Request, state: ^ParserState) -> Error {
 	//TODO: defer delete(line), and allocate seperate strings for all the props
 	if err != Error.None do return err;
 
+	//TODO: RFC 2616 recommends for robustness sake to ignore CRLFs sent before the Request-Line (Section 4.1)
 	if line == "" do return Error.EmptyRequestLine;
 
 	fmt.printf("line: '%s'\n", line);
@@ -228,7 +229,9 @@ parse_request :: proc(stream: os.Handle, socket: ^zed.Socket) -> (Request, Error
 	fmt.printf("Parsing request line\n");
 
 	error := parse_request_line(&result, &state);
-	if error != Error.None do return result, error; // send a bad request and terminate the connection, once we get to the connection part
+	// send a bad request and terminate the connection, once we get to the connection part
+	// Perhaps a 'Not Implemented' message would be better as the method could be an extension. Error.InvalidMethod specific?
+	if error != Error.None do return result, error;
 
 	fmt.printf("Parsed request\n");
 
@@ -241,7 +244,7 @@ parse_request :: proc(stream: os.Handle, socket: ^zed.Socket) -> (Request, Error
 		fmt.printf("header: '%s'\n", line);
 		offset := 0;
 		for line[offset] != ':' {
-			//TODO: Never handle never finding a colon
+			//TODO: Handle never finding a colon
 			offset += 1;
 		}
 
@@ -273,10 +276,15 @@ main :: proc() {
 	client_socket: zed.Socket;
 	client_addr: zed.Address;
 	for zed.tcp_accept(&listen_socket, &client_socket, &client_addr) == 0 {
-		fmt.printf("Accepted!\n");
+		fmt.printf("Accepted! client address: '%s'\n", zed.host_to_str(client_addr.host));
 		req, err := parse_request(os.Handle(client_socket.handle), &client_socket);
 		fmt.printf("err: %v\n", err);
 		fmt.printf("req: %#v\n", req);
+
+		response := "HTTP/1.1 200 OK\r\nConnection: close\r\nContent-Length: 13\r\n\r\nHello, world!asdasdasd";
+		zed.tcp_socket_send(&client_socket, &response[0], i32(len(response)));
+
+		zed.socket_close(&client_socket);
 	}
 
 	/*example, errno := os.open("request_example.txt", os.O_RDONLY);
