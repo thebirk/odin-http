@@ -1,3 +1,9 @@
+package http
+
+import "core:os"
+import "core:fmt"
+import zed "shared:zed_net"
+
 Method :: enum {
 	Invalid,
 	OPTIONS,

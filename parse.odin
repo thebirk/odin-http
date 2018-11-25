@@ -1,5 +1,8 @@
 package http
 
+import "core:os"
+import zed "shared:zed_net"
+
 CRLF :: "\r\n";
 CR :: '\r';
 LF :: '\n';
