@@ -50,3 +50,87 @@ CODE_502 :: "Bad Gateway";
 CODE_503 :: "Service Unavailable";
 CODE_504 :: "Gateway Timeout";
 CODE_505 :: "HTTP Version Not Supported";
+
+/*
+General headers
+===============
+
+Cache-Control
+Connection
+Date
+Pragma
+Trailer
+Transfer-Encoding
+Upgrade
+Via
+Warning
+*/
+
+/*
+Request methods
+===============
+
+OPTIONS
+GET
+HEAD
+POST
+PUT
+DELETE
+TRACE
+CONNECt
+
+Request headers
+===============
+
+Accept
+Accept-Charset
+Accept-Encoding
+Accept-Language
+Authorization
+Expect
+From
+Host - required in HTTP/1.1
+If-Match
+If-Modified-Since
+If-None-Match
+If-Range
+If-Unmodified-Since
+Max-Forwards
+Proxy-Authorization
+Range
+Referer
+TE
+User-Agent
+*/
+
+/*
+Response header
+===============
+
+Accept-Ranges
+Age
+ETag
+Location
+Proxy-Authenticate
+Retry-After
+Server
+Vary
+WWW-Authenticate
+*/
+
+/*
+Entity header
+=============
+
+Allow
+Content-Encoding
+Content-Language
+Content-Length
+Content-Location
+Content-MD5
+Content-Range
+Content-Type
+Expires
+Last-Modified
+
+*/
